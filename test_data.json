@@ -1,0 +1,16 @@
+{
+  "kills": 14,
+  "deaths": 9,
+  "assists": 7,
+  "team_kills": 30,
+  "kda": 3.29,
+  "kp": 76.67,
+  "avg_array": [
+    14,
+    12,
+    13,
+    12
+  ],
+  "avg": 12.75,
+  "mocked_data": true
+}
