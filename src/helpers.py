@@ -16,20 +16,20 @@ def console_parser(local_logger):
             local_logger.error("inputted not digit argument (string or with minus)")
     return arg
 
-def request_template(endpoint, local_logger):
+def request_template(endpoint, local_logger, user_agent=requests):
     response_for_return = None
     try:
-        response = requests.get(endpoint).json()
+        response = user_agent.get(endpoint)
         if response.status_code != 200:
             local_logger.error(f"Request to {endpoint} endpoint finished with {response.status_code} code with \
             {response.reason} reason")
         else:
-            response_for_return = response
-    except requests.exceptions.ConnectionError:
+            response_for_return = response.json()
+    except user_agent.exceptions.ConnectionError:
         local_logger.error("Internet Connection error")
-    except requests.exceptions.Timeout:
+    except user_agent.exceptions.Timeout:
         local_logger.error("Connection timeout")
-    except requests.exceptions.MissingSchema:
+    except user_agent.exceptions.MissingSchema:
         local_logger.error("URL does not exist")
     except:
         local_logger.error("Unknown problem with requesting or DotaAPI")

@@ -1,6 +1,22 @@
 import logging
-from helpers import request_template
+from .helpers import request_template
 
+class MockedResponseData:
+    def __init__(self, status_code=200, reason='OK', content=None):
+        if content is None:
+            content = {'mocked_data': True}
+        self.content = content
+        self.status_code = status_code
+        self.reason = reason
+
+    def json(self):
+        return self.content
+
+    def status_code(self):
+        return self.status_code
+
+    def reason(self):
+        return self.reason
 
 class Logger:
     def __init__(self):
