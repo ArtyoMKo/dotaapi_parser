@@ -3,30 +3,11 @@ import requests
 
 from .helpers import request_template, compute_kda, compute_kp, compute_avg
 
-
-class MockedResponseData:
-    def __init__(self, status_code=200, reason='OK', content=None):
-        if content is None:
-            content = {'mocked_data': True}
-        self.content = content
-        self.status_code = status_code
-        self.reason = reason
-
-    def json(self):
-        return self.content
-
-    def status_code(self):
-        return self.status_code
-
-    def reason(self):
-        return self.reason
-
+TOP_PLAYERS_ENDPOINT = 'https://api.opendota.com/api/playersByRank'
+PLAYER_MATCHES_ENDPOINT = "https://api.opendota.com/api/players/{}/recentMatches"
+MATCH_DETAILS_ENDPOINT = "https://api.opendota.com/api/matches/{}"
 
 class Logger:
-    def __init__(self):
-        self.logger = logging
-        # self.logger.basicConfig(filename="logs.log", level=logging.INFO)
-
     def debug(self, message):
         logging.debug(message)
 
@@ -44,18 +25,15 @@ class DotaApi:
             'description': 'Parsed top players data from Dota game',
             'data': []
         }
-        self.top_players_endpoint = 'https://api.opendota.com/api/playersByRank'
-        self.player_matches_endpoint = "https://api.opendota.com/api/players/{}/recentMatches"
-        self.match_details_endpoint = "https://api.opendota.com/api/matches/{}"
 
     def __get_top_players(self, count):
-        response = request_template(self.top_players_endpoint, requests)
+        response = request_template(self.TOP_PLAYERS_ENDPOINT, requests)
         if response is not None:
             self.top_players = response[:count]
         return self.top_players
 
     def __get_recent_matches_for_player(self, player_id):
-        response = request_template(self.player_matches_endpoint.format(player_id))
+        response = request_template(self.PLAYER_MATCHES_ENDPOINT.format(player_id))
         match_ids = []
         if response is not None:
             for match in response:
@@ -75,7 +53,7 @@ class DotaApi:
                 'KP': [],
             }
         for match_id in match_ids:
-            response = request_template(self.match_details_endpoint.format(match_id))
+            response = request_template(self.MATCH_DETAILS_ENDPOINT.format(match_id))
             if response is not None:
                 for player in response['players']:
                     if player['account_id'] == player_id:

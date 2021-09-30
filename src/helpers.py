@@ -27,11 +27,6 @@ def compute_kp(kills, deaths, team_kills):
 def compute_avg(array):
     return round(sum(array)/len(array), 2)
 
-def read_test_data():
-    with open('test_data.json', 'r') as rf:
-        data = json.load(rf)
-    return data
-
 def request_template(endpoint, user_agent=requests):
     response_for_return = None
     try:
