@@ -36,3 +36,11 @@ def mock_top_players_response(count):
     with patch('src.tools.request_template') as patched_request_template:
         patched_request_template.return_value = test_data['responses']['top_players']['response']
         return api._DotaApi__get_top_players(count)
+
+def mock_recent_matches_for_player_response():
+    test_data = read_test_data()
+
+    api = DotaApi()
+    with patch('src.tools.request_template') as patched_request_template:
+        patched_request_template.return_value = test_data['responses']['recent_matches']['response']
+        return api._DotaApi__get_recent_matches_for_player(test_data['responses']['recent_matches']['account_id'])

@@ -27,7 +27,20 @@ class TestClassForDotaApi(unittest.TestCase):
     def test_get_top_players_with_zero_response(self):
         result = mock_top_players_response(0)
         assert len(result) == 0
-        #
+
+    def test_get_recent_matches_for_player_type(self):
+        result = mock_recent_matches_for_player_response()
+        assert type(result) == list
+
+    def test_get_recent_matches_for_player_response(self):
+        result = mock_recent_matches_for_player_response()
+        assert result[0] == self.test_data['responses']['recent_matches']['assert_recent_matches_first_match']
+
+    def test_get_recent_matches_for_player_max_length(self):
+        result = mock_recent_matches_for_player_response()
+        assert len(result) == self.test_data['responses']['recent_matches']['max_length']
+
+
         # with patch.object(api, '_DotaApi__get_top_players', return_value={'hey': 123}) as method:
         #     # api.no_get_top_players()
         #     api.get_players(200)
