@@ -1,5 +1,5 @@
 from helpers import console_parser
-from classes import DotaApi
+from tools import DotaApi
 import logging
 
 

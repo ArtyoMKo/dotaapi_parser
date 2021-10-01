@@ -1,8 +1,10 @@
 from src import *
 from .helpers import *
 from .mocks import *
+import unittest
+from unittest.mock import patch
 
-class TestClassForHelperMethods:
+class TestClassForHelperMethods(unittest.TestCase):
     test_data = read_test_data()
 
     def test_request_template(self):
@@ -40,6 +42,14 @@ class TestClassForHelperMethods:
         assert compute_avg(
             self.test_data['avg_array']
         ) == self.test_data['avg']
+
+    def test_classes_one(self):
+        api = DotaApi()
+        with patch.object(api, '_DotaApi__get_top_players', return_value={'hey': 123}) as method:
+            # api.no_get_top_players()
+            api.get_players(200)
+            # method.assert_called_once_with()
+            assert api.get_players(200) == {'hey': 123}
 
 # def test_request_template_neg_timeout_log(caplog):
 #     from unittest.mock import Mock

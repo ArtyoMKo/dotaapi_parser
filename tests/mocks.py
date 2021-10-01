@@ -1,4 +1,8 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
+
+from src import DotaApi
+from tests.helpers import read_test_data
+
 
 class MockedResponseData:
     def __init__(self, status_code=200, reason='OK', content=None):
@@ -24,3 +28,11 @@ def mock_get_request(return_value=MockedResponseData(), side_effect=None):
     else:
         mock_requests.get.return_value = return_value
     return mock_requests
+
+def mock_top_players_response(count):
+    test_data = read_test_data()
+
+    api = DotaApi()
+    with patch('src.tools.request_template') as patched_request_template:
+        patched_request_template.return_value = test_data['responses']['top_players']['response']
+        return api._DotaApi__get_top_players(count)

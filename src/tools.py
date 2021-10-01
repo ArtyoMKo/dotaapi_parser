@@ -27,13 +27,13 @@ class DotaApi:
         }
 
     def __get_top_players(self, count):
-        response = request_template(self.TOP_PLAYERS_ENDPOINT, requests)
-        if response is not None:
+        response = request_template(TOP_PLAYERS_ENDPOINT, requests)
+        if response is not None or len(response) > 0:
             self.top_players = response[:count]
         return self.top_players
 
     def __get_recent_matches_for_player(self, player_id):
-        response = request_template(self.PLAYER_MATCHES_ENDPOINT.format(player_id))
+        response = request_template(PLAYER_MATCHES_ENDPOINT.format(player_id))
         match_ids = []
         if response is not None:
             for match in response:
@@ -53,7 +53,7 @@ class DotaApi:
                 'KP': [],
             }
         for match_id in match_ids:
-            response = request_template(self.MATCH_DETAILS_ENDPOINT.format(match_id))
+            response = request_template(MATCH_DETAILS_ENDPOINT.format(match_id))
             if response is not None:
                 for player in response['players']:
                     if player['account_id'] == player_id:
@@ -103,4 +103,8 @@ class DotaApi:
                     player_finale_data = self.__construct_player_data(player_matches_data)
                     self.data['data'].append(player_finale_data)
         return self.data
+
+    def get_players(self, count):
+        return self.__get_top_players(count)
+
 
