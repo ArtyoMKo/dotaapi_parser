@@ -7,22 +7,13 @@ TOP_PLAYERS_ENDPOINT = 'https://api.opendota.com/api/playersByRank'
 PLAYER_MATCHES_ENDPOINT = "https://api.opendota.com/api/players/{}/recentMatches"
 MATCH_DETAILS_ENDPOINT = "https://api.opendota.com/api/matches/{}"
 
-# class Logger:
-#     def debug(self, message):
-#         logging.debug(message)
-#
-#     def info(self, message):
-#         logging.info(message)
-#
-#     def error(self, message):
-#         logging.error(message)
-
-
 class DotaApi:
     def __init__(self):
         self.top_players = []
         self.data = {
             'description': 'Parsed top players data from Dota game',
+            'successfully': False,
+            'message': '',
             'data': []
         }
 
@@ -89,9 +80,12 @@ class DotaApi:
                     player_matches_data = self.__get_player_score_for_matches(match_ids, player['account_id'])
                     player_finale_data = self.__construct_player_data(player_matches_data)
                     self.data['data'].append(player_finale_data)
+                else:
+                    self.data['message'] = 'Match ids does not exists for some account(s)'
+            self.data['successfully'] = True
+        else:
+            self.data['message'] = 'Top players does not exists, see logs.log messages'
         return self.data
 
-    def get_players(self, count):
-        return self.__get_top_players(count)
 
 

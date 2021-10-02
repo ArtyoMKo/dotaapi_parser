@@ -2,16 +2,22 @@
   "kills": 14,
   "deaths": 9,
   "assists": 7,
+  "assists_neg": 0,
   "team_kills": 30,
+  "team_kills_neg": 0,
   "kda": 3.29,
+  "kda_neg": 23,
   "kp": 76.67,
+  "kp_neg": 0,
   "avg_array": [
     14,
     12,
     13,
     12
   ],
+  "avg_array_neg": [],
   "avg": 12.75,
+  "avg_neg": 0,
   "mocked_data": true,
   "responses": {
     "top_players": {

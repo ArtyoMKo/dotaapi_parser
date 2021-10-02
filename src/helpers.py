@@ -1,21 +1,15 @@
 import requests
 import logging
-import sys
 
-def console_parser():
-    arguments = sys.argv
-    arg = 10
-    if len(arguments) > 1:
-        if arguments[1].isdigit():
-            parsed_argument = int(arguments[1])
-            if parsed_argument > 100:
-                arg = 100
-                logging.info("allowed count in range of 0-100")
-            else:
-                arg = parsed_argument
-        else:
-            logging.error("inputted not digit argument (string or with minus)")
-    return arg
+def console_parser(parser):
+    argument = parser.parse_args().count
+    if argument > 100:
+        argument = 100
+        logging.info("allowed count in range of 0-100")
+    elif argument < 0:
+        argument = 1
+        logging.info("allowed count in range of 0-100, with negative count will set 1")
+    return argument
 
 def compute_kda(kills, deaths, assists):
     kd = kills+deaths

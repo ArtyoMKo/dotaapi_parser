@@ -1,6 +1,7 @@
+import argparse
 from unittest.mock import Mock, patch
 
-from src import DotaApi
+from src import DotaApi, console_parser
 from tests.helpers import read_test_data
 
 
@@ -63,3 +64,10 @@ def mock_player_score_for_matches_response():
 def mock_construct_player_data(player_data):
     api = DotaApi()
     return api._DotaApi__construct_player_data(player_data)
+
+def mock_console_parser(count):
+    parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
+    parser.add_argument('count', metavar='N', type=int, default=10, help='count of players')
+    with patch('argparse.ArgumentParser.parse_args', return_value=argparse.Namespace(count=count)):
+        result = console_parser(parser)
+    return result
