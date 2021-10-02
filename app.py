@@ -1,13 +1,31 @@
+from flask import Flask
 import argparse
 import logging
 import datetime
 import time
 
 from src.parser import DotaApi
-from src.helpers import console_parser, save_json
+from src.helpers import console_parser, save_json, read_saved_data
 
+app = Flask(__name__)
 
-def main(parser):
+@app.route('/')
+def get_log():
+    with open('src/logs.log', 'r') as rf:
+        data = rf.read().splitlines()
+    return {
+        'logs': data
+    }
+
+@app.route('/saved_data')
+def get_saved_data():
+    return read_saved_data()
+
+@app.before_first_request
+def pars_data():
+    parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
+    parser.add_argument('--count', metavar='N', type=int, default=10, help='count of players')
+
     start_time = time.time()
     start_date = str(datetime.datetime.now())
     
@@ -26,7 +44,6 @@ def main(parser):
     logging.shutdown()
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
-    parser.add_argument('count', metavar='N', type=int, default=10, help='count of players')
-    main(parser)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
+

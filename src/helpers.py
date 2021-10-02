@@ -88,5 +88,10 @@ def save_json(parsed_data):
     with open('parsed_data.json', 'w', encoding='utf-8') as wf:
         json.dump(parsed_data, wf, ensure_ascii=False, indent=4)
 
+def read_saved_data():
+    with open('parsed_data.json', 'r', encoding='utf-8') as rf:
+        parsed_data = json.load(rf)
+    return parsed_data
+
 
 

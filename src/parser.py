@@ -93,7 +93,7 @@ class DotaApi:
                 else:
                     self.data['message'] = messages['api']['no_match_ids']
             self.data['successfully'] = True
-            self.data['message'] = messages['api']['']
+            self.data['message'] = messages['api']['success']
         else:
             self.data['message'] = messages['api']['no_players']
         self.data['parsing_time_sec'] = str(round(time.time()-self.start_time, 2))
