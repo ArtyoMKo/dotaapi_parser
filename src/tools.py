@@ -1,21 +1,21 @@
 import logging
 import requests
 
-from .helpers import request_template, compute_kda, compute_kp, compute_avg
+from .helpers import request_template, compute_kda, compute_kp, construct_player_data_helper
 
 TOP_PLAYERS_ENDPOINT = 'https://api.opendota.com/api/playersByRank'
 PLAYER_MATCHES_ENDPOINT = "https://api.opendota.com/api/players/{}/recentMatches"
 MATCH_DETAILS_ENDPOINT = "https://api.opendota.com/api/matches/{}"
 
-class Logger:
-    def debug(self, message):
-        logging.debug(message)
-
-    def info(self, message):
-        logging.info(message)
-
-    def error(self, message):
-        logging.error(message)
+# class Logger:
+#     def debug(self, message):
+#         logging.debug(message)
+#
+#     def info(self, message):
+#         logging.info(message)
+#
+#     def error(self, message):
+#         logging.error(message)
 
 
 class DotaApi:
@@ -42,7 +42,6 @@ class DotaApi:
 
     def __get_player_score_for_matches(self, match_ids, player_id):
         player_matches_data = {
-                'player_name': '',
                 'player_id': player_id,
                 'total_games': len(match_ids),
                 'kills': [],
@@ -57,41 +56,29 @@ class DotaApi:
             if response is not None:
                 for player in response['players']:
                     if player['account_id'] == player_id:
-                        if player['account_id']['isRadiant']:
+                        if player['isRadiant']:
                             team_kills = response['radiant_score']
                         else:
                             team_kills = response['dire_score']
-                        player_matches_data['kills'].append(player['account_id']['kills'])
-                        player_matches_data['deaths'].append(player['account_id']['deaths'])
-                        player_matches_data['assists'].append(player['account_id']['assists'])
+                        player_matches_data['kills'].append(player['kills'])
+                        player_matches_data['deaths'].append(player['deaths'])
+                        player_matches_data['assists'].append(player['assists'])
                         player_matches_data['team_kills'].append(team_kills)
                         player_matches_data['KDA'].append(compute_kda(
-                            player['account_id']['kills'],
-                            player['account_id']['deaths'],
-                            player['account_id']['assists']
+                            player['kills'],
+                            player['deaths'],
+                            player['assists']
                         ))
                         player_matches_data['KP'].append(compute_kp(
-                            player['account_id']['kills'],
-                            player['account_id']['deaths'],
+                            player['kills'],
+                            player['deaths'],
                             team_kills
                         ))
                         break
-        if len(match_ids):
-            player_matches_data['player_name'] = player['account_id']['personaname']
         return player_matches_data
 
     def __construct_player_data(self, player_matches_data):
-        return {
-            'game': 'Dota',
-            'player_name': player_matches_data['player_name'],
-            'player_id': player_matches_data['player_id'],
-            'max_KDA': max(player_matches_data['KDA']),
-            'min_KDA': min(player_matches_data['KDA']),
-            'avg_KDA': compute_avg(player_matches_data['KDA']),
-            'max_KP': max(player_matches_data['KDA']),
-            'min_KP': min(player_matches_data['KDA']),
-            'avg_KP': compute_avg(player_matches_data['KP'])
-        }
+        return construct_player_data_helper(player_matches_data)
 
     def parse_top_players_and_their_data(self, count):
         self.__get_top_players(count)

@@ -1,7 +1,6 @@
 import requests
 import logging
 import sys
-import json
 
 def console_parser():
     arguments = sys.argv
@@ -19,13 +18,24 @@ def console_parser():
     return arg
 
 def compute_kda(kills, deaths, assists):
-    return round((kills+deaths)/assists, 2)
+    kd = kills+deaths
+    if assists == 0:
+        return round(kd, 2)
+    else:
+        return round(kd/assists, 2)
 
 def compute_kp(kills, deaths, team_kills):
-    return round((kills+deaths)*100/team_kills, 2)
+    kd = kills + deaths
+    if team_kills == 0:
+        return 0
+    else:
+        return round(kd*100/team_kills, 2)
 
 def compute_avg(array):
-    return round(sum(array)/len(array), 2)
+    try:
+        return round(sum(array)/len(array), 2)
+    except ZeroDivisionError:
+        return 0
 
 def request_template(endpoint, user_agent=requests):
     response_for_return = None
@@ -46,3 +56,31 @@ def request_template(endpoint, user_agent=requests):
         logging.error("Unknown problem with requesting or DotaAPI")
     finally:
         return response_for_return
+
+def construct_player_data_helper(player_matches_data):
+    try:
+        return {
+            'game': 'Dota',
+            'player_id': player_matches_data['player_id'],
+            'max_KDA': max(player_matches_data['KDA']),
+            'min_KDA': min(player_matches_data['KDA']),
+            'avg_KDA': compute_avg(player_matches_data['KDA']),
+            'max_KP': max(player_matches_data['KDA']),
+            'min_KP': min(player_matches_data['KDA']),
+            'avg_KP': compute_avg(player_matches_data['KP'])
+        }
+    except ValueError:
+        logging.error(f"API ERROR:Empty data for {player_matches_data['player_id']}")
+        return {
+            'game': 'Dota',
+            'player_id': player_matches_data['player_id'],
+            'max_KDA': 0,
+            'min_KDA': 0,
+            'avg_KDA': 0,
+            'max_KP': 0,
+            'min_KP': 0,
+            'avg_KP': 0
+        }
+
+
+

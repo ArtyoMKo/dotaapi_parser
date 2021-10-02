@@ -21,6 +21,7 @@ class MockedResponseData:
     def reason(self):
         return self.reason
 
+
 def mock_get_request(return_value=MockedResponseData(), side_effect=None):
     mock_requests = Mock()
     if side_effect:
@@ -28,6 +29,7 @@ def mock_get_request(return_value=MockedResponseData(), side_effect=None):
     else:
         mock_requests.get.return_value = return_value
     return mock_requests
+
 
 def mock_top_players_response(count):
     test_data = read_test_data()
@@ -37,6 +39,7 @@ def mock_top_players_response(count):
         patched_request_template.return_value = test_data['responses']['top_players']['response']
         return api._DotaApi__get_top_players(count)
 
+
 def mock_recent_matches_for_player_response():
     test_data = read_test_data()
 
@@ -44,3 +47,19 @@ def mock_recent_matches_for_player_response():
     with patch('src.tools.request_template') as patched_request_template:
         patched_request_template.return_value = test_data['responses']['recent_matches']['response']
         return api._DotaApi__get_recent_matches_for_player(test_data['responses']['recent_matches']['account_id'])
+
+
+def mock_player_score_for_matches_response():
+    test_data = read_test_data()
+
+    api = DotaApi()
+    with patch('src.tools.request_template') as patched_request_template:
+        patched_request_template.return_value = test_data['responses']['player_score_for_matches']['response']
+        return api._DotaApi__get_player_score_for_matches(
+            test_data['responses']['player_score_for_matches']['match_ids'],
+            test_data['responses']['player_score_for_matches']['player_id']
+        )
+
+def mock_construct_player_data(player_data):
+    api = DotaApi()
+    return api._DotaApi__construct_player_data(player_data)
