@@ -1,14 +1,16 @@
 import requests
 import logging
+import json
 
 def console_parser(parser):
+    messages = read_messages()
     argument = parser.parse_args().count
     if argument > 100:
         argument = 100
-        logging.info("allowed count in range of 0-100")
+        logging.info(messages['console']['hug'])
     elif argument < 0:
         argument = 1
-        logging.info("allowed count in range of 0-100, with negative count will set 1")
+        logging.info(messages['console']['negative'])
     return argument
 
 def compute_kda(kills, deaths, assists):
@@ -32,6 +34,7 @@ def compute_avg(array):
         return 0
 
 def request_template(endpoint, user_agent=requests):
+    messages = read_messages()
     response_for_return = None
     try:
         response = user_agent.get(endpoint)
@@ -40,14 +43,14 @@ def request_template(endpoint, user_agent=requests):
             {response.reason} reason")
         else:
             response_for_return = response.json()
-    except user_agent.exceptions.ConnectionError:
-        logging.error("Internet Connection error")
-    except user_agent.exceptions.Timeout:
-        logging.error("Connection timeout")
-    except user_agent.exceptions.MissingSchema:
-        logging.error("URL does not exist")
+    except requests.exceptions.ConnectionError:
+        logging.error(messages['response']['connection_error'])
+    except requests.exceptions.Timeout:
+        logging.error(messages['response']['timeout'])
+    except requests.exceptions.MissingSchema:
+        logging.error(messages['response']['missing_schema'])
     except:
-        logging.error("Unknown problem with requesting or DotaAPI")
+        logging.error(messages['response']['unknown_exception'])
     finally:
         return response_for_return
 
@@ -75,6 +78,15 @@ def construct_player_data_helper(player_matches_data):
             'min_KP': 0,
             'avg_KP': 0
         }
+
+def read_messages():
+    with open('src/messages.json', 'r') as rf:
+        data = json.load(rf)
+    return data
+
+def serialize(parsed_data):
+    with open('parsed_data.json', 'w', encoding='utf-8') as wf:
+        json.dump(parsed_data, wf, ensure_ascii=False, indent=4)
 
 
 

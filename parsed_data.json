@@ -1,0 +1,29 @@
+{
+    "description": "Parsed top players data from Dota game",
+    "successfully": true,
+    "message": "",
+    "parsed_data": "2021-10-02 17:17:35.344040",
+    "parsing_time_sec": "70.24",
+    "data": [
+        {
+            "game": "Dota",
+            "player_id": 268590680,
+            "max_KDA": 7.0,
+            "min_KDA": 0.53,
+            "avg_KDA": 2.2,
+            "max_KP": 7.0,
+            "min_KP": 0.53,
+            "avg_KP": 47.11
+        },
+        {
+            "game": "Dota",
+            "player_id": 1051246927,
+            "max_KDA": 7.0,
+            "min_KDA": 0.17,
+            "avg_KDA": 2.43,
+            "max_KP": 7.0,
+            "min_KP": 0.17,
+            "avg_KP": 43.88
+        }
+    ]
+}

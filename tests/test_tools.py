@@ -1,4 +1,4 @@
-from .mocks import *
+from tests.mocks import *
 import unittest
 
 

@@ -1,5 +1,6 @@
-from src import *
-from .mocks import *
+from src.helpers import *
+from src.tools import *
+from tests.mocks import *
 import unittest
 
 class TestClassForHelperMethods(unittest.TestCase):
@@ -74,20 +75,48 @@ class TestClassForHelperMethods(unittest.TestCase):
         result = mock_console_parser(1000)
         assert result == 100
 
-# def test_request_template_neg_timeout_log(caplog):
-#     from unittest.mock import Mock
-#     mock_requests = Mock()
-#     mock_requests.get.side_effect = requests.exceptions.Timeout
-#     request_template('ValidURL', mock_requests)
-#     assert 'timeout' in caplog.text
 
+class TestLogs(unittest.TestCase):
+    messages = read_test_data()
 
-# class CaptureLogsExample(unittest.TestCase):
-#     @loggingtestcase.capturelogs('root', level='ERROR')
-#     def test_always_display_logs(self, logs):
-#         from unittest.mock import Mock
-#         mock_requests = Mock()
-#         mock_requests.get.side_effect = requests.exceptions.ConnectionError
-#         # logging.getLogger('root').error('Internet Connection error')
-#         request_template('ValidURL', mock_requests)
-#         self.assertEqual(logs.output, ['ERROR:root:Internet Connection error'])
+    def test_request_template_connection_error_log(self):
+        with self.assertLogs() as captured:
+            mock_template_request_for_log(
+                'https://api.opendota.com/api/playersByRank',
+                requests.exceptions.ConnectionError
+            )
+        assert captured.records[0].getMessage() == self.messages['messages']['response']['connection_error']
+
+    def test_request_template_timeout_log(self):
+        with self.assertLogs() as captured:
+            mock_template_request_for_log(
+                'https://api.opendota.com/api/playersByRank',
+                requests.exceptions.Timeout
+            )
+        assert captured.records[0].getMessage() == self.messages['messages']['response']['timeout']
+
+    def test_request_template_missing_schema_log(self):
+        with self.assertLogs() as captured:
+            mock_template_request_for_log(
+                '',
+                requests.exceptions.MissingSchema
+            )
+        assert captured.records[0].getMessage() == self.messages['messages']['response']['missing_schema']
+
+    def test_request_template_unknown_error_log(self):
+        with self.assertLogs() as captured:
+            mock_template_request_for_log(
+                'https://api.opendota.com/api/playersByRank',
+                'Unknown exception'
+            )
+        assert captured.records[0].getMessage() == self.messages['messages']['response']['unknown_exception']
+
+    def test_console_parser_neg_log(self):
+        with self.assertLogs() as captured:
+            mock_console_parser(-10)
+        assert captured.records[0].getMessage() == self.messages['messages']['console']['negative']
+
+    def test_console_parser_log(self):
+        with self.assertLogs() as captured:
+            mock_console_parser(1000)
+        assert captured.records[0].getMessage() == self.messages['messages']['console']['hug']

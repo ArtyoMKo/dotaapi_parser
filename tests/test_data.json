@@ -2448,5 +2448,17 @@
                 "KP": [12.5, 26.67, 95.12]
             },
       "assert_keys": ["game", "player_id", "max_KDA", "min_KDA", "avg_KDA", "max_KP", "min_KP", "avg_KP"]
+    },
+  "messages": {
+    "console": {
+      "hug": "allowed count in range of 0-100, with hug number will set 100",
+      "negative": "allowed count in range of 0-100, with negative number will set 1"
+    },
+    "response": {
+      "connection_error": "Internet Connection error",
+      "timeout": "Connection timeout",
+      "missing_schema": "URL does not exist",
+      "unknown_exception": "Unknown problem with requesting or DotaAPI"
     }
+  }
 }
