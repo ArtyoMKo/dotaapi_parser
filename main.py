@@ -3,8 +3,8 @@ import logging
 import datetime
 import time
 
-from src.tools import DotaApi
-from src.helpers import console_parser, serialize
+from src.parser import DotaApi
+from src.helpers import console_parser, save_json
 
 
 def main(parser):
@@ -18,7 +18,7 @@ def main(parser):
 
     dota_api = DotaApi(players_count, start_date)
     parsed_data = dota_api.parse_top_players_and_their_data()
-    serialize(parsed_data)
+    save_json(parsed_data)
 
     end_time = time.time()
     logging.info(f"{str(datetime.datetime.now())}: Session ended, execution time |->> {round(end_time-start_time, 8)} "

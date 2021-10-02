@@ -1,7 +1,7 @@
 import argparse
 from unittest.mock import Mock, patch
 
-from src.tools import DotaApi
+from src.parser import DotaApi
 from src.helpers import console_parser, request_template
 from tests.helpers import read_test_data
 
@@ -37,7 +37,7 @@ def mock_top_players_response(count):
     test_data = read_test_data()
 
     api = DotaApi(count)
-    with patch('src.tools.request_template') as patched_request_template:
+    with patch('src.parser.request_template') as patched_request_template:
         patched_request_template.return_value = test_data['responses']['top_players']['response']
         return api._DotaApi__get_top_players()
 
@@ -46,7 +46,7 @@ def mock_recent_matches_for_player_response():
     test_data = read_test_data()
 
     api = DotaApi()
-    with patch('src.tools.request_template') as patched_request_template:
+    with patch('src.parser.request_template') as patched_request_template:
         patched_request_template.return_value = test_data['responses']['recent_matches']['response']
         return api._DotaApi__get_recent_matches_for_player(test_data['responses']['recent_matches']['account_id'])
 
@@ -55,7 +55,7 @@ def mock_player_score_for_matches_response():
     test_data = read_test_data()
 
     api = DotaApi()
-    with patch('src.tools.request_template') as patched_request_template:
+    with patch('src.parser.request_template') as patched_request_template:
         patched_request_template.return_value = test_data['responses']['player_score_for_matches']['response']
         return api._DotaApi__get_player_score_for_matches(
             test_data['responses']['player_score_for_matches']['match_ids'],

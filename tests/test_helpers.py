@@ -1,5 +1,5 @@
 from src.helpers import *
-from src.tools import *
+from src.parser import *
 from tests.mocks import *
 import unittest
 

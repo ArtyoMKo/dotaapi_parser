@@ -84,7 +84,7 @@ def read_messages():
         data = json.load(rf)
     return data
 
-def serialize(parsed_data):
+def save_json(parsed_data):
     with open('parsed_data.json', 'w', encoding='utf-8') as wf:
         json.dump(parsed_data, wf, ensure_ascii=False, indent=4)
 
