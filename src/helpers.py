@@ -1,21 +1,22 @@
 import requests
 import logging
 import json
+import sys
 
 def console_parser(parser):
     messages = read_messages()
     try:
         argument = parser.parse_args().count
+        if argument > 100:
+            argument = 100
+            logging.info(messages['console']['hug'])
+        elif argument < 0:
+            argument = 1
+            logging.info(messages['console']['negative'])
+        return argument
     except:
         logging.error('console argument error')
-        quit()
-    if argument > 100:
-        argument = 100
-        logging.info(messages['console']['hug'])
-    elif argument < 0:
-        argument = 1
-        logging.info(messages['console']['negative'])
-    return argument
+        sys.exit()
 
 def compute_kda(kills, deaths, assists):
     kd = kills+deaths
@@ -96,6 +97,4 @@ def read_saved_data():
     with open('parsed_data.json', 'r', encoding='utf-8') as rf:
         parsed_data = json.load(rf)
     return parsed_data
-
-
 
