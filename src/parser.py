@@ -1,7 +1,8 @@
 import requests
 import time
 
-from src.helpers import request_template, compute_kda, compute_kp, construct_player_data_helper, read_messages
+from src.helpers import read_json as read_messages
+from src.helpers import request_template, compute_kda, compute_kp, construct_player_data_helper
 
 TOP_PLAYERS_ENDPOINT = 'https://api.opendota.com/api/playersByRank'
 PLAYER_MATCHES_ENDPOINT = "https://api.opendota.com/api/players/{}/recentMatches"
@@ -78,7 +79,7 @@ class DotaApi:
         return construct_player_data_helper(player_matches_data)
 
     def parse_top_players_and_their_data(self):
-        messages = read_messages()
+        messages = read_messages('src/messages.json')
         self.__get_top_players()
         if len(self.top_players):
             for player in self.top_players:

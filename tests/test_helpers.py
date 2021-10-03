@@ -1,7 +1,9 @@
 from src.helpers import *
 from src.parser import *
 from tests.mocks import *
+
 import unittest
+from pytest import raises
 
 class TestClassForHelperMethods(unittest.TestCase):
     test_data = read_test_data()
@@ -74,6 +76,20 @@ class TestClassForHelperMethods(unittest.TestCase):
     def test_console_parser_hug(self):
         result = mock_console_parser(1000)
         assert result == 100
+
+    def test_console_parser_exception(self):
+        with raises(argparse.ArgumentError):
+            mock_console_parser_exception()
+
+    def test_read_json_test_data(self):
+        result = read_json('tests/test_data.json')
+        assert result == self.test_data
+
+    def test_save_parsed_data(self):
+        parsed_data = {'data': 'empty_data'}
+        save_parsed_data(parsed_data)
+        result = read_json('parsed_data.json')
+        assert result == parsed_data
 
 
 class TestLogs(unittest.TestCase):

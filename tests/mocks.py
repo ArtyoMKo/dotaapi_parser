@@ -68,10 +68,16 @@ def mock_construct_player_data(player_data):
 
 def mock_console_parser(count):
     parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
-    parser.add_argument('count', metavar='N', type=int, default=10, help='count of players')
+    parser.add_argument('--count', metavar='N', type=int, default=10, help='count of players')
     with patch('argparse.ArgumentParser.parse_args', return_value=argparse.Namespace(count=count)):
         result = console_parser(parser)
     return result
+
+def mock_console_parser_exception_neg():
+    parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
+    parser.add_argument('--count', metavar='N', type=int, default=10, help='count of players')
+    with patch('argparse.ArgumentParser.parse_args', side_effect=argparse.ArgumentError(None, 'Wrong argument')):
+        console_parser(parser)
 
 def mock_template_request_for_log(url, side_effect):
     mock_requests = Mock()

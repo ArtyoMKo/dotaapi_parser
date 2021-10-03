@@ -2,10 +2,10 @@ import requests
 import logging
 import json
 import sys
-import argparse
+from argparse import ArgumentError as ArgumentError
 
 def console_parser(parser):
-    messages = read_messages()
+    messages = read_json('src/messages.json')
     try:
         argument = parser.parse_args().count
         if argument > 100:
@@ -15,9 +15,9 @@ def console_parser(parser):
             argument = 1
             logging.info(messages['console']['negative'])
         return argument
-    except argparse.ArgumentError:
+    except ArgumentError:
         logging.error('console argument error')
-        sys.exit()
+        raise ArgumentError(None, 'Wrong argument')
 
 def compute_kda(kills, deaths, assists):
     kd = kills+deaths
@@ -40,7 +40,7 @@ def compute_avg(array):
         return 0
 
 def request_template(endpoint, user_agent=requests):
-    messages = read_messages()
+    messages = read_json('src/messages.json')
     response_for_return = None
     try:
         response = user_agent.get(endpoint)
@@ -85,17 +85,13 @@ def construct_player_data_helper(player_matches_data):
             'avg_KP': 0
         }
 
-def read_messages():
-    with open('src/messages.json', 'r') as rf:
+def read_json(source):
+    with open(source, 'r') as rf:
         data = json.load(rf)
     return data
 
-def save_json(parsed_data):
+def save_parsed_data(parsed_data):
     with open('parsed_data.json', 'w', encoding='utf-8') as wf:
         json.dump(parsed_data, wf, ensure_ascii=False, indent=4)
 
-def read_saved_data():
-    with open('parsed_data.json', 'r', encoding='utf-8') as rf:
-        parsed_data = json.load(rf)
-    return parsed_data
 
