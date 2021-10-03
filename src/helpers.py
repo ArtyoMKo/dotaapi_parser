@@ -1,7 +1,6 @@
 import requests
 import logging
 import json
-import sys
 from argparse import ArgumentError as ArgumentError
 
 def console_parser(parser):
@@ -18,6 +17,7 @@ def console_parser(parser):
     except ArgumentError:
         logging.error('console argument error')
         raise ArgumentError(None, 'Wrong argument')
+
 
 def compute_kda(kills, deaths, assists):
     kd = kills+deaths

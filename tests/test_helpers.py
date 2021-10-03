@@ -79,7 +79,7 @@ class TestClassForHelperMethods(unittest.TestCase):
 
     def test_console_parser_exception(self):
         with raises(argparse.ArgumentError):
-            mock_console_parser_exception()
+            mock_console_parser_exception_neg()
 
     def test_read_json_test_data(self):
         result = read_json('tests/test_data.json')
