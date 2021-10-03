@@ -9,7 +9,7 @@ top players by rating is 100.
 ## Usage
 
 ### With Python 
-Run `pip install -r requirements.txt`, after that run `python ./app.py --count integer_number_of_needed_players_count"`.
+Run `pip install -r requirements.txt`, after that run `python ./app.py --count "integer_number_of_needed_players_count"`.
 
 Logs will serialize on localhost:5000/ and will save in src/logs.log file.
 
