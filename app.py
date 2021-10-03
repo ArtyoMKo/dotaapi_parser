@@ -3,6 +3,7 @@ import argparse
 import logging
 import datetime
 import time
+import threading
 
 from src.parser import DotaApi
 from src.helpers import console_parser, save_json, read_saved_data
@@ -21,11 +22,8 @@ def get_log():
 def get_saved_data():
     return read_saved_data()
 
-@app.before_first_request
-def pars_data():
-    parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
-    parser.add_argument('--count', metavar='N', type=int, default=10, help='count of players')
-
+# @app.before_first_request
+def pars_data(parser):
     start_time = time.time()
     start_date = str(datetime.datetime.now())
     
@@ -45,5 +43,14 @@ def pars_data():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
+    parser.add_argument('--count', metavar='N', type=int, default=10, help='count of players')
+    save_json({})
+
+    parser_thread = threading.Thread(
+        target=pars_data, name='Data parser', args=([parser])
+    )
+    parser_thread.start()
+
     app.run(host='0.0.0.0', port=5000)
 

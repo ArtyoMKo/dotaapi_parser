@@ -8,7 +8,7 @@ PLAYER_MATCHES_ENDPOINT = "https://api.opendota.com/api/players/{}/recentMatches
 MATCH_DETAILS_ENDPOINT = "https://api.opendota.com/api/matches/{}"
 
 class DotaApi:
-    def __init__(self, count=10, datetime='', timeout=4):
+    def __init__(self, count=10, datetime='', timeout=2):
         self.top_players = []
         self.data = {
             'description': 'Parsed top players data from Dota game',
