@@ -4,7 +4,11 @@ import json
 
 def console_parser(parser):
     messages = read_messages()
-    argument = parser.parse_args().count
+    try:
+        argument = parser.parse_args().count
+    except:
+        logging.error('console argument error')
+        quit()
     if argument > 100:
         argument = 100
         logging.info(messages['console']['hug'])

@@ -9,6 +9,8 @@ from src.parser import DotaApi
 from src.helpers import console_parser, save_json, read_saved_data
 
 app = Flask(__name__)
+parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
+parser.add_argument('--count', metavar='N', type=int, default=10, help='count of players')
 
 @app.route('/')
 def get_log():
@@ -22,15 +24,13 @@ def get_log():
 def get_saved_data():
     return read_saved_data()
 
-# @app.before_first_request
-def pars_data(parser):
+def pars_data(players_count):
     start_time = time.time()
     start_date = str(datetime.datetime.now())
     
     logging.basicConfig(filename="src/logs.log", filemode='w', level=logging.INFO)
 
-    players_count = console_parser(parser)
-    logging.info(f"{start_date}: Session started, parsing {players_count} accounts")
+    logging.info(f"{start_date}: Session started, parsing {players_count} accounts, please wait until session ending")
 
     dota_api = DotaApi(players_count, start_date)
     parsed_data = dota_api.parse_top_players_and_their_data()
@@ -43,12 +43,12 @@ def pars_data(parser):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
-    parser.add_argument('--count', metavar='N', type=int, default=10, help='count of players')
     save_json({})
 
+    players_count = console_parser(parser)
+
     parser_thread = threading.Thread(
-        target=pars_data, name='Data parser', args=([parser])
+        target=pars_data, name='Data parser', args=([players_count])
     )
     parser_thread.start()
 
