@@ -86,9 +86,13 @@ def construct_player_data_helper(player_matches_data):
         }
 
 def read_json(source):
-    with open(source, 'r') as rf:
-        data = json.load(rf)
-    return data
+    try:
+        with open(source, 'r') as rf:
+            data = json.load(rf)
+        return data
+    except FileNotFoundError:
+        logging.error(f"{source} file not found")
+        raise FileNotFoundError
 
 def save_json(parsed_data, source='parsed_data.json'):
     with open(source, 'w', encoding='utf-8') as wf:

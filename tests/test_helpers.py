@@ -85,6 +85,10 @@ class TestClassForHelperMethods(unittest.TestCase):
         result = read_json('tests/test_data.json')
         assert result == self.test_data
 
+    def test_read_json_neg(self):
+        with raises(FileNotFoundError):
+            read_json('invalid_json.json')
+
 def test_save_json(tmp_path):
     parsed_data = {'data': 'empty_data'}
     file_path = tmp_path / 'test_parsed_data.json'
@@ -138,3 +142,10 @@ class TestLogs(unittest.TestCase):
         with self.assertLogs() as captured:
             mock_console_parser(1000)
         assert captured.records[0].getMessage() == self.messages['messages']['console']['hug']
+        
+    def test_read_json_log(self):
+        with raises(FileNotFoundError):
+            with self.assertLogs() as captured:
+                read_json('invalid_json.json')
+        assert self.messages['messages']['read_json']['not_found'] in captured.records[0].getMessage()
+

@@ -2459,6 +2459,9 @@
       "timeout": "Connection timeout",
       "missing_schema": "URL does not exist",
       "unknown_exception": "Unknown problem with requesting or Dota API"
+    },
+    "read_json": {
+      "not_found": "file not found"
     }
   }
 }

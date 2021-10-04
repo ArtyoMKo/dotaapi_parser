@@ -11,8 +11,8 @@ from src.helpers import read_json as read_saved_data
 from src.helpers import save_json as save_parsed_data
 
 app = Flask(__name__)
-parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
-parser.add_argument('--count', metavar='N', type=int, default=10, help='count of players')
+PARSER = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
+PARSER.add_argument('--count', metavar='N', type=int, default=10, help='count of players')
 
 @app.route('/')
 def get_log():
@@ -47,7 +47,7 @@ def pars_data(players_count):
 if __name__ == "__main__":
     save_parsed_data({})
 
-    players_count = console_parser(parser)
+    players_count = console_parser(PARSER)
 
     parser_thread = threading.Thread(
         target=pars_data, name='Data parser', args=([players_count])
