@@ -2458,7 +2458,7 @@
       "connection_error": "Internet Connection error",
       "timeout": "Connection timeout",
       "missing_schema": "URL does not exist",
-      "unknown_exception": "Unknown problem with requesting or DotaAPI"
+      "unknown_exception": "Unknown problem with requesting or Dota API"
     }
   }
 }

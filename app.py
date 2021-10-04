@@ -5,10 +5,10 @@ import datetime
 import time
 import threading
 
-from src.parser import DotaApi
+from src.parser import DotaApiParser
 from src.helpers import console_parser
 from src.helpers import read_json as read_saved_data
-from src.helpers import save_parsed_data
+from src.helpers import save_json as save_parsed_data
 
 app = Flask(__name__)
 parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')
@@ -34,7 +34,7 @@ def pars_data(players_count):
 
     logging.info(f"{start_date}: Session started, parsing {players_count} accounts, please wait until session ending")
 
-    dota_api = DotaApi(players_count, start_date)
+    dota_api = DotaApiParser(players_count, start_date)
     parsed_data = dota_api.parse_top_players_and_their_data()
     save_parsed_data(parsed_data)
 

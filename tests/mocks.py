@@ -1,10 +1,9 @@
 import argparse
 from unittest.mock import Mock, patch
 
-from src.parser import DotaApi
+from src.parser import DotaApiParser
 from src.helpers import console_parser, request_template
 from tests.helpers import read_test_data
-
 
 class MockedResponseData:
     def __init__(self, status_code=200, reason='OK', content=None):
@@ -36,35 +35,35 @@ def mock_get_request(return_value=MockedResponseData(), side_effect=None):
 def mock_top_players_response(count):
     test_data = read_test_data()
 
-    api = DotaApi(count)
+    api = DotaApiParser(count)
     with patch('src.parser.request_template') as patched_request_template:
         patched_request_template.return_value = test_data['responses']['top_players']['response']
-        return api._DotaApi__get_top_players()
+        return api._DotaApiParser__get_top_players()
 
 
 def mock_recent_matches_for_player_response():
     test_data = read_test_data()
 
-    api = DotaApi()
+    api = DotaApiParser()
     with patch('src.parser.request_template') as patched_request_template:
         patched_request_template.return_value = test_data['responses']['recent_matches']['response']
-        return api._DotaApi__get_recent_matches_for_player(test_data['responses']['recent_matches']['account_id'])
+        return api._DotaApiParser__get_recent_matches_for_player(test_data['responses']['recent_matches']['account_id'])
 
 
 def mock_player_score_for_matches_response():
     test_data = read_test_data()
 
-    api = DotaApi()
+    api = DotaApiParser()
     with patch('src.parser.request_template') as patched_request_template:
         patched_request_template.return_value = test_data['responses']['player_score_for_matches']['response']
-        return api._DotaApi__get_player_score_for_matches(
+        return api._DotaApiParser__get_player_score_for_matches(
             test_data['responses']['player_score_for_matches']['match_ids'],
             test_data['responses']['player_score_for_matches']['player_id']
         )
 
 def mock_construct_player_data(player_data):
-    api = DotaApi()
-    return api._DotaApi__construct_player_data(player_data)
+    api = DotaApiParser()
+    return api._DotaApiParser__construct_player_data(player_data)
 
 def mock_console_parser(count):
     parser = argparse.ArgumentParser(description='Input one integer for parsing data count, defaults 10')

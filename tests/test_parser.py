@@ -2,7 +2,7 @@ from tests.mocks import *
 import unittest
 
 
-class TestClassForDotaApi(unittest.TestCase):
+class TestClassForDotaApiParser(unittest.TestCase):
     test_data = read_test_data()
 
     def test_get_top_players_type(self):

@@ -90,8 +90,9 @@ def read_json(source):
         data = json.load(rf)
     return data
 
-def save_parsed_data(parsed_data):
-    with open('parsed_data.json', 'w', encoding='utf-8') as wf:
+def save_json(parsed_data, source='parsed_data.json'):
+    with open(source, 'w', encoding='utf-8') as wf:
         json.dump(parsed_data, wf, ensure_ascii=False, indent=4)
+
 
 

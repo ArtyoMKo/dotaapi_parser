@@ -85,11 +85,13 @@ class TestClassForHelperMethods(unittest.TestCase):
         result = read_json('tests/test_data.json')
         assert result == self.test_data
 
-    def test_save_parsed_data(self):
-        parsed_data = {'data': 'empty_data'}
-        save_parsed_data(parsed_data)
-        result = read_json('parsed_data.json')
-        assert result == parsed_data
+def test_save_json(tmp_path):
+    parsed_data = {'data': 'empty_data'}
+    file_path = tmp_path / 'test_parsed_data.json'
+    save_json(parsed_data, str(file_path.absolute()))
+    assert file_path.exists() is True
+    result = read_json(file_path)
+    assert result == parsed_data
 
 
 class TestLogs(unittest.TestCase):
