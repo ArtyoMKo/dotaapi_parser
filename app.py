@@ -26,14 +26,7 @@ def get_log():
 def get_saved_data():
     return read_saved_data('parsed_data.json')
 
-def pars_data(players_count):
-    start_time = time.time()
-    start_date = str(datetime.datetime.now())
-    
-    logging.basicConfig(filename="src/logs.log", filemode='w', level=logging.INFO)
-
-    logging.info(f"{start_date}: Session started, parsing {players_count} accounts, please wait until session ending")
-
+def pars_data(players_count, start_time, start_date):
     dota_api = DotaApiParser(players_count, start_date)
     parsed_data = dota_api.parse_top_players_and_their_data()
     save_parsed_data(parsed_data)
@@ -41,18 +34,23 @@ def pars_data(players_count):
     end_time = time.time()
     logging.info(f"{str(datetime.datetime.now())}: Session ended, execution time |->> {round(end_time-start_time, 8)} "
                  f"seconds")
-    logging.shutdown()
 
 
 if __name__ == "__main__":
-    save_parsed_data({})
-
+    start_time = time.time()
+    start_date = str(datetime.datetime.now())
     players_count = console_parser(PARSER)
 
+    logging.basicConfig(filename="src/logs.log", filemode='w', level=logging.INFO)
+    logging.info(f"{start_date}: Session started, parsing {players_count} accounts, please wait until session ending")
+
+    save_parsed_data({})
+
     parser_thread = threading.Thread(
-        target=pars_data, name='Data parser', args=([players_count])
+        target=pars_data, name='Data parser', args=([players_count, start_time, start_date])
     )
     parser_thread.start()
 
     app.run(host='0.0.0.0', port=5000)
+
 

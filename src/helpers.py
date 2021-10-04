@@ -45,8 +45,8 @@ def request_template(endpoint, user_agent=requests):
     try:
         response = user_agent.get(endpoint)
         if response.status_code != 200:
-            logging.error(f"Request to {endpoint} endpoint finished with {response.status_code} code with \
-            {response.reason} reason")
+            logging.error(f"Request to {endpoint} endpoint finished with {response.status_code} code with "
+                          f"{response.reason} reason")
         else:
             response_for_return = response.json()
     except requests.exceptions.ConnectionError:
