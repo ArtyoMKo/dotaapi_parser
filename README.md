@@ -9,11 +9,27 @@ top players by rating is 100 etc.
 Run program with Docker, or just with Python.
 
 ## Usage
+### Virtual environment setup
+Run virtual environment installation command
+```bash
+python -m venv venv
+```
+
+Activate venv
+``` bash
+source venv/bin/activate
+```
 
 ### With Python 
-Run `pip install -r requirements.txt`.
+Run requirements installation command
+```bash
+pip install -r requirements.txt
+```
 
-Run `python ./app.py --count integer_number_of_needed_players(default 10)`.
+Run app
+```bash
+python ./app.py --count integer_number_of_needed_players(default 10)
+```
 
 Logs will serialize on localhost:5000/ and will save in src/logs.log file.
 
